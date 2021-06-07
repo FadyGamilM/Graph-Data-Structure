@@ -111,17 +111,20 @@ public:
       to [2] and back from [2] to [3] and finally back from [3] to [0]
    */
    void DFS(T Start_Vertex,unordered_map<T,bool>&seen){
+      if(seen[Start_Vertex]){
+         return;
+      }
+      // Check the base case
       seen[Start_Vertex]=true;
       cout<<Start_Vertex<<" ";
-      
       for(T connected_vertex:this->AdjacencyList[Start_Vertex]){
          // connected_vertex is one of childs of the popped vertex, now check if it's not seen before
          if(seen[connected_vertex]!=true){
             this->DFS(connected_vertex,seen);
          }
       }
-         /*********************************************************************/
    }
+
   void DFS_Setup_Seen_Structure(T Start_Vertex){ 
       // we need 1 additional data structure..
       //==> [1] Visited map that track if this vertex is vistied befor or not.
@@ -137,11 +140,11 @@ public:
 
 int main(){
    Graph<int> G1(6);
-   G1.add_Edge(0,3);
-   G1.add_Edge(0,1);
-   G1.add_Edge(3,4);
-   G1.add_Edge(3,2);
-   G1.add_Edge(4,5);
+   G1.add_Edge(0,3); // 0->[3], 3->[0]
+   G1.add_Edge(0,1); // 0->[3,1], 3->[0], 1->[0]
+   G1.add_Edge(3,4); // 0->[3,1], 3->[0,4], 1->[0], 4->[3]
+   G1.add_Edge(3,2); // 0->[3,1], 3->[0,4,2], 1->[0], 4->[3], 2->[3]
+   G1.add_Edge(4,5); // 0->[3,1], 3->[0,4,2], 1->[0], 4->[3,5], 2->[3], 5->[4]
    G1.DFS_Setup_Seen_Structure(0);
    return 0;
 }
